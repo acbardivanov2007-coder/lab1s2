@@ -2,8 +2,8 @@
 #include "datatime.h"
 
 int main() {
-
-   datatime* d = datatime_create(1, 1, 1970, 0, 0);
+   // Инициализация текущей датой: 12 апреля 2026, 17:44
+   datatime* d = datatime_create(12, 4, 2026, 17, 44);
    if (d == NULL) {
       return 1;
    }
@@ -11,7 +11,11 @@ int main() {
    uint16_t choice;
    int total_price = 0;
 
-   printf("=== Конструктор часов CASIO ===\n");
+   // Изменено название устройства
+   printf("=== Конструктор Умного Фитнес-Браслета ===\n");
+   
+   // Демонстрация выравнивания структуры (Задание 4)
+   printf("Размер структуры device_data в памяти: %zu байт(а)\n", sizeof(device_data));
 
    // DISPLAY
    printf("\nВыберите дисплей:\n");
@@ -23,7 +27,6 @@ int main() {
    choice = get_choice(0, 3);
 
    dev_set_display(d->dev, choice);
-
    total_price += display_price[choice];
 
    // BRIGHTNESS
@@ -31,7 +34,7 @@ int main() {
    choice = get_choice(0, 15);
 
    dev_set_brightness(d->dev, choice);
-   total_price += choice * 50;  // условно 50 руб за уровень
+   total_price += choice * 50;  
 
    // TIME FORMAT
    printf("\nФормат времени:\n");
@@ -63,7 +66,6 @@ int main() {
    choice = get_choice(0, 3);
 
    dev_set_memory(d->dev, choice);
-
    total_price += memory_price[choice];
 
    // CPU
@@ -76,7 +78,6 @@ int main() {
    choice = get_choice(0, 3);
 
    dev_set_cpu(d->dev, choice);
-
    total_price += cpu_price[choice];
 
    // WATER
@@ -93,7 +94,7 @@ int main() {
    if (choice == 2) total_price += 1500;
 
    // ФИНАЛ
-   printf("\n=== Ваше устройство собрано ===\n");
+   printf("\n=== Ваш Фитнес-Браслет собран ===\n");
 
    printf("Дисплей: %s\n", 
       display_names[dev_get_display(d->dev)]);
@@ -119,8 +120,6 @@ int main() {
    printf("\nИТОГОВАЯ ЦЕНА: %d руб\n", total_price);
 
    datatime_destroy(d);
-   d = NULL;
-   //datatime_destroy(d);
 
    return 0;
 }
