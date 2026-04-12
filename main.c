@@ -2,45 +2,39 @@
 #include "datatime.h"
 
 int main() {
-    printf("=== Демонстрация работы структуры datatime ===\n\n");
+    printf("=== Тестирование расширенного функционала ===\n\n");
 
-    printf("1. Проверка конструктора по умолчанию:\n");
     datatime* dt1 = datatime_create_default();
-    printf("dt1: ");
-    datatime_print(dt1);
-    printf("\n");
+    datatime* dt2 = datatime_from_string("2023-12-31 23:59");
+    
+    printf("\n--- 1. Вывод отдельных полей ---\n");
+    datatime_print_date(dt2);
+    datatime_print_time(dt2);
 
-    printf("2. Проверка конструктора с параметрами:\n");
-    datatime* dt2 = datatime_create(2026, 4, 12, 18, 45);
-    printf("dt2: ");
-    datatime_print(dt2);
-    printf("\n");
+    printf("\n--- 2. Сеттеры и изменение (++) ---\n");
+    printf("Было: "); datatime_print(dt2);
+    printf("Инкремент (++) на 1 минуту...\n");
+    datatime_increment(dt2);
+    printf("Стало: "); datatime_print(dt2); // Должен стать 2024-01-01 00:00
 
-    printf("3. Проверка конструктора копирования (копия dt2):\n");
-    datatime* dt3 = datatime_create_copy(dt2);
-    printf("dt3: ");
-    datatime_print(dt3);
-    printf("\n");
+    printf("\n--- 3. Изменение (--) ---\n");
+    datatime_decrement(dt2);
+    printf("Декремент (--), вернулись: "); datatime_print(dt2);
 
-    printf("4. Проверка строкового ввода (Парсинг):\n");
-    const char* str = "2023-01-05 10:15";
-    printf("Строка для парсинга: '%s'\n", str);
-    datatime* dt4 = datatime_from_string(str);
-    printf("dt4: ");
-    datatime_print(dt4);
-    printf("\n");
+    printf("\n--- 4. Сравнение (==, !=, >) ---\n");
+    datatime_set_year(dt1, 2025);
+    printf("dt1: "); datatime_print(dt1);
+    printf("dt2: "); datatime_print(dt2);
+    
+    if (datatime_is_greater(dt1, dt2)) printf("dt1 БОЛЬШЕ dt2\n");
+    if (datatime_is_not_equal(dt1, dt2)) printf("dt1 НЕ РАВНО dt2\n");
 
-    printf("5. Нахождение временного интервала:\n");
-    printf("От: "); datatime_print(dt4);
-    printf("До: "); datatime_print(dt2);
-    datatime_difference(dt4, dt2);
-    printf("\n");
+    printf("\n--- 5. Интервал ---\n");
+    datatime_difference(dt2, dt1);
 
-    printf("6. Очистка динамической памяти:\n");
+    printf("\n--- 6. Очистка ---\n");
     datatime_destroy(dt1);
     datatime_destroy(dt2);
-    datatime_destroy(dt3);
-    datatime_destroy(dt4);
 
     return 0;
 }
