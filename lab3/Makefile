@@ -1,5 +1,5 @@
 gcc:
-	gcc -g main.c contvector.c ../lab_2/datatime.c ../lab_2/bitstruct.c -o 1.o
+	gcc -g main.c contvector.c ../lab1s2/datatime.c ../lab2s2/bitstruct.c -o 1.o
 clean:
 	rm -f *.o
 run: gcc
