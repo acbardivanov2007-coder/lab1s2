@@ -5,7 +5,7 @@
 #include <stdlib.h>
 #include <stdbool.h>
 
-// Описание структуры с использованием typedef
+// Описание структуры
 typedef struct {
     int year;
     int month;
@@ -20,7 +20,7 @@ datatime* datatime_create(int year, int month, int day, int hour, int minute);
 datatime* datatime_create_copy(const datatime* source);
 void datatime_destroy(datatime* dt);
 
-// --- Сравнение объектов (==, !=, >, <, >=, <=) ---
+// --- Сравнение объектов ---
 int datatime_compare(const datatime* dt1, const datatime* dt2);
 bool datatime_is_equal(const datatime* dt1, const datatime* dt2);
 bool datatime_is_not_equal(const datatime* dt1, const datatime* dt2);
@@ -35,13 +35,13 @@ void datatime_print_date(const datatime* dt);
 void datatime_print_time(const datatime* dt);
 datatime* datatime_from_string(const char* str);
 
-// --- Ручной ввод с клавиатуры ---
+// --- Ручной безопасный ввод с клавиатуры ---
 void datatime_input(datatime* dt);
 void datatime_input_year(datatime* dt);
 void datatime_input_month(datatime* dt);
 void datatime_input_day(datatime* dt);
 
-// --- Изменение данных (++, --, setters) ---
+// --- Изменение данных (++, --, защищенные setters) ---
 void datatime_increment(datatime* dt); 
 void datatime_decrement(datatime* dt); 
 
