@@ -1,5 +1,3 @@
-// https://open.spotify.com/album/5epJvt9jHbYI1j6WqCppGc?si=Ku7bcDeEStCHNp6WAwQ1gg
-// https://open.spotify.com/playlist/6f2WRnB0KEgqGKr53FuwOV?si=8m4RXWNqQd-2P1pu0bZXfA
 #include "contvector.h"
 
 int main() {
