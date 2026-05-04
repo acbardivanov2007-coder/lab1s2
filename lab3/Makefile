@@ -1,6 +1,16 @@
-gcc:
-	gcc -g main.c contvector.c ../lab1s2/datatime.c ../lab2s2/bitstruct.c -o 1.o
+CC = gcc
+CFLAGS = -Wall -Wextra -std=c11
+
+all: demo
+
+demo: main.o vector.o
+	$(CC) $(CFLAGS) main.o vector.o -o demo
+
+main.o: main.c vector.h device.h
+	$(CC) $(CFLAGS) -c main.c
+
+vector.o: vector.c vector.h device.h
+	$(CC) $(CFLAGS) -c vector.c
+
 clean:
-	rm -f *.o
-run: gcc
-	leaks --atExit -- ./1.o
+	rm -f *.o demo
