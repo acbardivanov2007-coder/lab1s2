@@ -1,69 +1,42 @@
-#include "contvector.h"
+#include <stdio.h>
+#include "vector.h"
 
 int main() {
-    printf("1. СОЗДАНИЕ И PUSH\n");
-    vector_t *v1 = vec_create(2);
-    vec_push(v1, datatime_create(13, 2, 1970, 15, 43));
-    vec_push(v1, datatime_create(8, 9, 1970, 22, 43));
-    printf("Вектор v1 после создания и push:\n");
-    print_vector(v1);
+    printf("--- Запуск демонстрации вектора устройств ---\n");
 
-    printf("Добавляем 3-й элемент:\n");
-    vec_push(v1, datatime_create(18, 9, 1970, 10, 0));
-    printf("Вектор v1 после добавления 3-го элемента:\n");
-    print_vector(v1);
+    // 1. Создаем вектор с начальной емкостью 2
+    vector* my_vec = vector_create(2);
+    printf("Создан вектор: size = %d, capacity = %d\n", my_vec->size, my_vec->capacity);
 
-    printf("2. ВСТАВКА (INSERT) И ИЗМЕНЕНИЕ (CHANGE)\n");
-    printf("Вставляем 21.07.1971 20:00 на индекс 1:\n");
-    vec_insert(v1, 1, datatime_create(21, 7, 1971, 20, 0));
-    print_vector(v1);
+    // 2. Создаем устройства с разными битовыми параметрами
+    device* dev1 = device_create(1, 10, 1, 1, 2, 1, 2); // Водостойкость IP68 (2), будильник ВКЛ (1)
+    device* dev2 = device_create(0, 5, 0, 0, 1, 0, 0);  // Будильник ВЫКЛ (0)
+    device* dev3 = device_create(2, 15, 1, 1, 3, 2, 1); // Вызовет расширение вектора!
 
-    printf("Заменяем 15.05.2023 12:00 на индекс 1:\n");
-    vec_change(v1, 1, datatime_create(25, 9, 1972, 2, 12));
-    print_vector(v1);
+    // 3. Добавляем устройства в вектор
+    vector_push(my_vec, dev1);
+    printf("Добавлено устройство 1. size = %d, capacity = %d\n", my_vec->size, my_vec->capacity);
 
-    printf("3. УДАЛЕНИЕ (REMOVE) И ИЗВЛЕЧЕНИЕ (POP)\n");
-    printf("Удаляем элемент по индексу 2:\n");
-    vec_remove(v1, 2);
-    print_vector(v1);
+    vector_push(my_vec, dev2);
+    printf("Добавлено устройство 2. size = %d, capacity = %d\n", my_vec->size, my_vec->capacity);
 
-    printf("Делаем pop (забираем последний элемент):\n");
-    datatime *popped = vec_pop(v1);
-    printf("Извлечённый элемент:\n");
-    datatime_print(popped);
-    datatime_destroy(popped);
-    printf("Вектор v1 после pop:\n");
-    print_vector(v1);
+    // Следующий push вызовет авто-расширение
+    vector_push(my_vec, dev3);
+    printf("Добавлено устройство 3. Сработало расширение! size = %d, capacity = %d\n", my_vec->size, my_vec->capacity);
 
-    printf("4. КОПИРОВАНИЕ (COPY) И ОБЪЕДИНЕНИЕ (MERGE)\n");
-    printf("Создаём копию v1 в v2:\n");
-    vector_t *v2 = vec_copy(v1);
-    printf("Вектор v2 (копия v1):\n");
-    print_vector(v2);
+    // 4. Доступ к элементу
+    device* viewed_dev = vector_get(my_vec, 0);
+    printf("Первое устройство: Яркость = %d, Будильник = %d\n", viewed_dev->brightness, viewed_dev->alarm_flag);
 
-    printf("5. СЛИЯНИЕ (MERGE)\n");
-    printf("Объединяем v1 и v2 в v1:\n");
-    vec_merge(v1, v2);
-    printf("Вектор v1 после объединения с v2:\n");
-    print_vector(v1);
+    // 5. Извлечение элемента
+    device* popped_dev = vector_pop(my_vec);
+    printf("Извлекли (pop) последнее устройство. Теперь size = %d\n", my_vec->size);
+    // Уничтожаем извлеченное устройство вручную, так как вектор за него больше не отвечает
+    device_destroy(popped_dev);
 
-    printf("6. ИТЕРАТОРЫ (ПЕРЕБОР МАССИВА)\n");
-    vec_iter_t beg = vec_begin(v1);
-    vec_iter_t end = vec_end(v1);
-    printf("Перебор элементов вектора v1 с помощью итераторов:\n");
-    while (!vec_isequal(beg, end)) {
-        if(vec_iter_belong(beg, v1)){
-            datatime *dt = vec_get(v1, beg.ind);
-            printf("Итератор указывает на индекс %zu: ", beg.ind);
-            datatime_print(dt);
-        }
-        vec_iter_next(&beg);
-    }
+    // 6. Очистка всей оставшейся памяти
+    vector_destroy(my_vec);
+    printf("Память вектора и оставшихся устройств успешно освобождена.\n");
 
-    //printf("7. ОЧИСТКА ПАМЯТИ (DESTROY)\n");
-    vec_destroy(v1);
-    vec_destroy(v2);
-    v1 = NULL;
-    v2 = NULL;
     return 0;
 }
