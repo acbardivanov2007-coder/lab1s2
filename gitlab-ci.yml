@@ -1,0 +1,18 @@
+image: gcc:latest
+
+stages:
+  - format
+  - build
+
+check-format:
+  stage: format
+  before_script:
+    - apt-get update -qq && apt-get install -y -qq clang-format
+  script:
+    - git ls-files '*.c' '*.h' | xargs clang-format -i --verbose
+    - git diff --exit-code
+
+build:
+  stage: build
+  script:
+    - make
